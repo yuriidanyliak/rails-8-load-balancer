@@ -20,6 +20,8 @@ module ContentModeration
     private
 
     def upsert
+      # `phrase` is duplicated here (outside `query`) so scan results can read back
+      # which phrase matched without a round-trip to Postgres.
       @client.index(
         index: OpensearchClient::PERCOLATOR_INDEX,
         id: @banned_word.id,
@@ -29,7 +31,7 @@ module ContentModeration
     end
 
     def remove
-      @client.delete(index: OpensearchClient::PERCOLATOR_INDEX, id: @banned_word.id, ignore: [ 404 ])
+      @client.delete(index: OpensearchClient::PERCOLATOR_INDEX, id: @banned_word.id, ignore: [ 404 ], refresh: true)
     end
   end
 end

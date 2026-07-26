@@ -24,7 +24,8 @@ RSpec.describe ContentModeration::BannedWordIndexer do
     expect(client).to have_received(:delete).with(
       index: ContentModeration::OpensearchClient::PERCOLATOR_INDEX,
       id: 42,
-      ignore: [ 404 ]
+      ignore: [ 404 ],
+      refresh: true
     )
   end
 end

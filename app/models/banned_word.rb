@@ -7,5 +7,7 @@ class BannedWord < ApplicationRecord
 
   def sync_search_index
     ContentModeration::BannedWordIndexer.call(self)
+  rescue StandardError => e
+    Rails.logger.error("[BannedWord##{id}] failed to sync OpenSearch index: #{e.class}: #{e.message}")
   end
 end

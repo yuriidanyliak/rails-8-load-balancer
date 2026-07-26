@@ -27,4 +27,10 @@ RSpec.describe BannedWord, type: :model do
 
     expect(ContentModeration::BannedWordIndexer).to have_received(:call).with(banned_word)
   end
+
+  it "does not raise if the search index sync fails" do
+    allow(ContentModeration::BannedWordIndexer).to receive(:call).and_raise(StandardError, "boom")
+
+    expect { BannedWord.create!(phrase: "badword") }.not_to raise_error
+  end
 end
