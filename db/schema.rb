@@ -10,9 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_25_102506) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_26_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "backends", force: :cascade do |t|
+    t.integer "active_connections", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.boolean "healthy", default: true, null: false
+    t.string "host", null: false
+    t.integer "times_selected", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.integer "weight", default: 1, null: false
+    t.index ["host"], name: "index_backends_on_host", unique: true
+  end
+
+  create_table "banned_words", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.string "phrase", null: false
+    t.datetime "updated_at", null: false
+    t.index "lower((phrase)::text)", name: "index_banned_words_on_lower_phrase", unique: true
+  end
 
   create_table "tasks", force: :cascade do |t|
     t.datetime "created_at", null: false
