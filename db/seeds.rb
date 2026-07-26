@@ -7,3 +7,15 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+[
+  { host: "web-1", weight: 5, healthy: true },
+  { host: "web-2", weight: 3, healthy: true },
+  { host: "web-3", weight: 1, healthy: true },
+  { host: "web-4", weight: 1, healthy: false }
+].each do |attrs|
+  Backend.find_or_create_by!(host: attrs[:host]) do |backend|
+    backend.weight = attrs[:weight]
+    backend.healthy = attrs[:healthy]
+  end
+end
