@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_26_100000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_26_100010) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -31,6 +31,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_26_100000) do
     t.string "phrase", null: false
     t.datetime "updated_at", null: false
     t.index "lower((phrase)::text)", name: "index_banned_words_on_lower_phrase", unique: true
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.boolean "flagged", default: false, null: false
+    t.datetime "flagged_at"
+    t.datetime "last_scanned_at"
+    t.jsonb "matched_terms", default: [], null: false
+    t.datetime "updated_at", null: false
+    t.index ["flagged"], name: "index_messages_on_flagged"
+    t.index ["last_scanned_at"], name: "index_messages_on_last_scanned_at"
   end
 
   create_table "tasks", force: :cascade do |t|
