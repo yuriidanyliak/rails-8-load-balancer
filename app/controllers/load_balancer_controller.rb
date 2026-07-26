@@ -4,6 +4,7 @@ class LoadBalancerController < ApplicationController
 
   rescue_from LoadBalancer::UnknownStrategyError, with: :render_unknown_strategy
   rescue_from LoadBalancer::NoHealthyBackendsError, with: :render_no_healthy_backends
+  rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
   # GET /backends
   def index
@@ -38,5 +39,9 @@ class LoadBalancerController < ApplicationController
 
     def render_no_healthy_backends(error)
       render json: { error: error.message }, status: :service_unavailable
+    end
+
+    def render_not_found(error)
+      render json: { error: error.message }, status: :not_found
     end
 end

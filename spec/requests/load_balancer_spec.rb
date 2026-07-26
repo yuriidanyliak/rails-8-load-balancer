@@ -61,5 +61,12 @@ RSpec.describe "LoadBalancer", type: :request do
       expect(response).to have_http_status(:ok)
       expect(backend.reload.active_connections).to eq(0)
     end
+
+    it "returns a JSON 404 for an unknown host" do
+      delete "/route", params: { host: "does-not-exist" }
+
+      expect(response).to have_http_status(:not_found)
+      expect(JSON.parse(response.body)).to have_key("error")
+    end
   end
 end
