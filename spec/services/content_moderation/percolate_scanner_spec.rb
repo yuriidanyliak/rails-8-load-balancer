@@ -39,4 +39,19 @@ RSpec.describe ContentModeration::PercolateScanner do
 
     expect(client).not_to have_received(:search)
   end
+
+  it "collects matched_terms from multiple banned-word hits on the same record" do
+    message = Message.create!(body: "this contains both badword and worseword")
+
+    allow(client).to receive(:search).and_return(
+      "hits" => { "hits" => [
+        { "_source" => { "phrase" => "badword" }, "fields" => { "_percolator_document_slot" => [ 0 ] } },
+        { "_source" => { "phrase" => "worseword" }, "fields" => { "_percolator_document_slot" => [ 0 ] } }
+      ] }
+    )
+
+    described_class.new(Message, client: client) { |m| m.body }.call
+
+    expect(message.reload.matched_terms).to contain_exactly("badword", "worseword")
+  end
 end

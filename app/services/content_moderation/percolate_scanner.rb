@@ -47,7 +47,7 @@ module ContentModeration
     def apply_results(batch, matches_by_slot)
       now = Time.current
       batch.each_with_index do |record, slot|
-        matched = matches_by_slot[slot] || []
+        matched = matches_by_slot[slot]
         if matched.any?
           record.update_columns(flagged: true, flagged_at: now, matched_terms: matched, last_scanned_at: now)
         else
