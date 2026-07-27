@@ -22,6 +22,12 @@ gem "jbuilder"
 # Background job processing backed by Redis [https://github.com/sidekiq/sidekiq]
 gem "sidekiq"
 
+# OpenSearch client for content-moderation search
+gem "opensearch-ruby"
+
+# Cron-style recurring Sidekiq jobs
+gem "sidekiq-cron"
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 
